@@ -27,10 +27,19 @@ function Products (name){
     Products.all.push(this);
 }
 Products.all=[];
+
 for(let i=0 ; i<names.length;i++){
   new Products(names[i])
-}
+};
 
+
+function retrive(){
+  console.log(Products.all)
+  if(localStorage.length>0){
+    Products.all=JSON.parse(localStorage.getItem("orders"))
+  }
+  render();
+}
 function render(){
 let leftIndex = randomNumber(0, Products.all.length -1);
 let middleIndex = randomNumber(0, Products.all.length -1);
@@ -49,7 +58,6 @@ Products.all[middleIndex].views++;
 notToShow.push(middleIndex)
 Products.all[rightIndex].views++;
 notToShow.push(rightIndex)
-console.log('this is not to show',notToShow);
 
 leftImage.src = Products.all[leftIndex].path;
 leftImage.title = Products.all[leftIndex].name;
@@ -62,6 +70,8 @@ middleImage.alt = Products.all[middleIndex].name;
 rightImage.src = Products.all[rightIndex].path;
 rightImage.title = Products.all[rightIndex].name;
 rightImage.alt = Products.all[rightIndex].name;
+console.log("this is  ",Products.all)
+localStorage.setItem("orders",JSON.stringify(Products.all));
 }
 
 
@@ -102,6 +112,7 @@ function finish(){
    productsViews.push(Products.all[i].views);
    
   }
+  
   let ctx = document.getElementById('myChart').getContext('2d');
 let chart = new Chart(ctx, {
     // The type of chart we want to create
@@ -132,8 +143,8 @@ let chart = new Chart(ctx, {
 
 }
 
-render();
-
+// render();
+retrive();
 
 
 function randomNumber(min, max) {
